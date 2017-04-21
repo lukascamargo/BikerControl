@@ -1,0 +1,19 @@
+{
+  "name": "bikercontrol",
+  "version": "1.0.0",
+  "description": "Este projeto vai fazer o controle de informações de uma bicicleta ergonometrica e enviar para nuvem. Esses dados que estarão na nuvem poderão ser acessados por qualquer dispositivo, o que faz com que, durante o treino de um atleta numa bicicleta ergonometrica, os dados de velocidade e tempo do atleta possam aparecer na TV.",
+  "main": "app.js",
+  "scripts": {
+    "test": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lukasfialho/BikerControl.git"
+  },
+  "author": "Lukas Fialho, Igor de Almeida, Guilherme Henrique",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lukasfialho/BikerControl/issues"
+  },
+  "homepage": "https://github.com/lukasfialho/BikerControl#readme"
+}
