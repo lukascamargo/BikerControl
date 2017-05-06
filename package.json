@@ -1,17 +1,20 @@
 {
   "name": "bikercontrol",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "test": "node server.js",
     "start": "node server.js"
+  },
+  "engines": {
+    "node": "~7.7.2",
+    "npm": "~4.1.2"
   },
   "author": "Lukas Fialho, Igor de Almeida, Guilherme Henrique",
   "license": "ISC",
-  "dependencies":{
-  	"body-parser": "^1.15.2",
-  	"express":"^4.14.0",
-  	"socket.io":"^1.4.8"
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "serialport": "^4.0.7",
+    "socket.io": "^1.4.8"
   }
 }

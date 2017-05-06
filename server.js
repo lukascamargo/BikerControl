@@ -1,71 +1,42 @@
-'use stric';
+var path = require('path');
+var express = require('express');
+var app = express();
+var server = require('http').Server(app);
+var io = require('socket.io').listen(server);
+var porta = 8080;
 
-const express = require('express');
-	port = process.env.PORT || 3000,
-	fs = require('fs'),
-	app = express(),
-	io = require('socket.io').listen(app.listen(port)),
-	http = require('http'),
-	bodyParser = require('body-parser');
 
-app.use(bodyParser.urlencoded({
-	extended: true
-}));
+var serialport = require("serialport");
+var SerialPort = serialport.SerialPort;
 
-app.use(bodyParser.json());
-
-let sessionState;
-
-//Servidor html estático
-app.get("/", (req, res) => {
-	fs.readFile('index.html', (err, data) => {
-		res.writeHead(200);
-		res.end(data);
-	});
+var port = new SerialPort("COM5", {
+	baudrate: 9600,
+	parser: serialport.parsers.readline("\n")
 });
 
-
-//Post para gravar a session ID na variavel
-app.post("/", (req,res) => {
-	sessionState = JSON.stringify(req.body);
-	res.writeHead(200);
-	res.end('Set ok')
+io.on('connection', function(socket){
+	console.log('socket open');
 });
 
-//GET ::id para resetar a variavel
-app.get("/:id", (req, res) => {
-    if (req.params.id == 'reset') {
-        sessionState = JSON.stringify({});
-        res.writeHead(200);
-        res.end('Reset ok');
-    } else {
-        res.writeHead(404);
-        res.end('File not found');
-    }
+port.on('open', onOpen);
+port.on('data', onData);
+
+function onOpen(){
+	console.log('Sistema conectado com o Arduino');
+};
+
+function onData(data){
+	v = data * 0.0144;
+	io.sockets.emit('port', v);
+	console.log('Velocidade: ' + v);
+}
+
+
+app.get('/', function(req, res){
+	res.sendFile(path.join(__dirname + '/index.html'));
+
 });
 
-// Iniciando Socket Server
-io.on('connection', (socket) => {
-
-    // Manter estado das acoes
-    socket.on('sendreq', (data) => {
-        sessionState = JSON.stringify(data);
-    });
-
-    // Executa a ação
-    socket.on('ExecAction', (data) => {
-        sessionState = JSON.stringify(data);
-        socket.broadcast.emit('ExecActionRes', data);
-    });
-
-    //Agum navegador entrou no socket? Envia page load
-    if (sessionState) {
-        socket.emit('isServer', JSON.parse(sessionState));
-    } else {
-        sessionState = JSON.stringify({});
-        socket.emit('isServer', sessionState);
-    }
+server.listen(porta, function(){
+	console.log('Servidor escutando na porta '+porta);
 });
-
-console.log('Servidor iniciado na porta: ' + port)
-
