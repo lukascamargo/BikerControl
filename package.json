@@ -12,8 +12,10 @@
   "author": "Lukas Fialho, Igor de Almeida, Guilherme Henrique",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.15.2",
-    "express": "^4.14.0",
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "mongoose": "^4.9.8",
+    "plotly": "^1.0.6",
     "serialport": "^4.0.7",
     "socket.io": "^1.4.8"
   }
