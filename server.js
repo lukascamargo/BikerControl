@@ -15,7 +15,7 @@ var app = express();
 var server = require('http').Server(app);
 var request = require('request');
 var io = require('socket.io').listen(server);
-var porta = 8080;
+var porta = 8080 || process.env.PORT;
 
 //Declarando e importando o Banco de Dados
 require('./config/database')('mongodb://bikercontrol:123Mudar@ds057254.mlab.com:57254/heroku_vmv3brb0');
