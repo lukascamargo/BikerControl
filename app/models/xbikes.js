@@ -3,8 +3,7 @@ Schema = mongoose.Schema;
 
 var bikeSchema = new mongoose.Schema({
 	nome: String,
-    y: String,
-    x: String
+    velocidade: [{time: String, velocidade: String}]
 });
 
 
