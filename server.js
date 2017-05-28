@@ -100,6 +100,20 @@ app.get('/', function(req, res){
 
 });
 
+
+app.get('/getData/', function(req, res){
+    model
+        .find()
+            .then(function(resultado){
+                res.status(200);
+                res.json(resultado);
+            }, function(error){
+                res.json({erro: 'Deu erro,carai'});
+                res.sendStatus(404)
+            })
+})
+
+
 server.listen(process.env.PORT || 8080, function(){
 	console.log('Servidor escutando na porta '+porta);
 });
