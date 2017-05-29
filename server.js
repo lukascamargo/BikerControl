@@ -107,9 +107,13 @@ app.get('/getData/', function(req, res){
         .find()
             .then(function(resultado){
                 console.log('Entregando resultado...');
-                var velocidade = resultado[2].velocidade;;
+                
+                var velocidade = resultado[2].velocidade;
                 var index = velocidade.length - 1
-                var objeto = {nome: resultado[2].nome, velocidade: resultado[2].velocidade[index].velocidade};
+                var objeto = [{nome: resultado[2].nome, velocidade: resultado[2].velocidade[index].velocidade},
+                            {nome: resultado[1].nome, velocidade: resultado[1].velocidade[resultado[1].velocidade.length - 1].velocidade},
+                            {nome: resultado[0].nome, velocidade: resultado[0].velocidade[resultado[0].velocidade.length - 1].velocidade}];
+
                 res.json(objeto);
                 res.status(200);
             }, function(error){
