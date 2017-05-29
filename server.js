@@ -60,28 +60,29 @@ setInterval(function(){
 
            io.sockets.emit('port', bike.field1 * 0.0144);
 
+
            model
-                .findById('5929d3c4ae9d10129819e3d1')
-                .select('velocidade')
-                .then(function(resultado){
-                    resultado.velocidade.push({
-                        velocidade : bike.field1 * 0.0144,
-                        time : bike.created_at
-                    });
-                    resultado.save(function(err, result){
-                        var thisEdit;
-                        if(err){
-                            console.log('Deu erro pra salvar velocidade');
-                        } else {
-                            console.log('Velocidade atualizada. Indice: ');
-                            thisEdit = resultado.velocidade[resultado.velocidade.length - 1];
-                            console.log(thisEdit);
-                        }
-                    });
-                }, function(error){
-                    console.log('Deu erro');
-                    console.log(error);
-                });
+                .findById('592b720cfe5cf11c9c42ecf4')
+                    .select('velocidade')
+                        .then(function(resultado){
+                            resultado.velocidade.push({
+                                velocidade : bike.field1 * 0.0144,
+                                time : bike.created_at
+                            });
+                            resultado.save(function(err, result){
+                                var thisEdit;
+                                if(err){
+                                    console.log('Deu erro pra salvar velocidade');
+                                } else {
+                                    console.log('Velocidade atualizada. Indice: ');
+                                    thisEdit = resultado.velocidade[resultado.velocidade.length - 1];
+                                    console.log(resultado.velocidade.length);
+                                }
+                            });
+                        }, function(error){
+                            console.log('Deu erro');
+                            console.log(error);
+                        });
         }
 
         return bike;
@@ -105,8 +106,12 @@ app.get('/getData/', function(req, res){
     model
         .find()
             .then(function(resultado){
+                console.log('Entregando resultado...');
+                var velocidade = resultado[2].velocidade;;
+                var index = velocidade.length - 1
+                var objeto = {nome: resultado[2].nome, velocidade: resultado[2].velocidade[index].velocidade};
+                res.json(objeto);
                 res.status(200);
-                res.json(resultado);
             }, function(error){
                 res.json({erro: 'Deu erro,carai'});
                 res.sendStatus(404)
