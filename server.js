@@ -5,7 +5,7 @@ var client = new ThingSpeakClient({server: 'https://api.thingspeak.com/channels/
 var channelID = 278706;
 var yourWriteKey = 'W3Z1F80C4MF7F4QP';
 var readKeyApi = 'OA6Z8S0GI3CLF3BY';
-var url = 'https://thingspeak.com/channels/278706/field/1.json?api_key=OA6Z8S0GI3CLF3BY';
+var url = 'https://api.thingspeak.com/channels/278706/feeds.json';
 
 
 var path = require('path');
@@ -60,7 +60,7 @@ setInterval(function(){
 
            io.sockets.emit('port', bike.field1 * 0.0144);
 
-
+           
            model
                 .findById('592b720cfe5cf11c9c42ecf4')
                     .select('velocidade')
@@ -74,7 +74,30 @@ setInterval(function(){
                                 if(err){
                                     console.log('Deu erro pra salvar velocidade');
                                 } else {
-                                    console.log('Velocidade atualizada. Indice: ');
+                                    console.log('Velocidade atualizada para Bike 1. Indice: ');
+                                    thisEdit = resultado.velocidade[resultado.velocidade.length - 1];
+                                    console.log(resultado.velocidade.length);
+                                }
+                            });
+                        }, function(error){
+                            console.log('Deu erro');
+                            console.log(error);
+                        });
+
+            model
+                .findById('592b77ffb2a259231017c27b')
+                    .select('velocidade')
+                        .then(function(resultado){
+                            resultado.velocidade.push({
+                                velocidade : bike.field2 * 0.0144,
+                                time : bike.created_at
+                            });
+                            resultado.save(function(err, result){
+                                var thisEdit;
+                                if(err){
+                                    console.log('Deu erro pra salvar velocidade');
+                                } else {
+                                    console.log('Velocidade atualizada para Bike 2. Indice: ');
                                     thisEdit = resultado.velocidade[resultado.velocidade.length - 1];
                                     console.log(resultado.velocidade.length);
                                 }
@@ -111,8 +134,7 @@ app.get('/getData/', function(req, res){
                 var velocidade = resultado[2].velocidade;
                 var index = velocidade.length - 1
                 var objeto = [{nome: resultado[2].nome, velocidade: resultado[2].velocidade[index].velocidade},
-                            {nome: resultado[1].nome, velocidade: resultado[1].velocidade[resultado[1].velocidade.length - 1].velocidade},
-                            {nome: resultado[0].nome, velocidade: resultado[0].velocidade[resultado[0].velocidade.length - 1].velocidade}];
+                            {nome: resultado[3].nome, velocidade: resultado[3].velocidade[resultado[3].velocidade.length - 1].velocidade}];
 
                 res.json(objeto);
                 res.status(200);
